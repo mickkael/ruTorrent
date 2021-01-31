@@ -28,6 +28,7 @@ if(!isset($localhosts) || !count($localhosts))
 	$localhosts = array( "127.0.0.1", "localhost" );
 if(!isset($locale))	
 	$locale = "UTF8";
+getProfilePath();	// for creation profile, if it is absent
 
 function stripSlashesFromArray(&$arr)
 {
@@ -50,17 +51,20 @@ function stripSlashesFromArray(&$arr)
 
 function fix_magic_quotes_gpc() 
 {
-	if(function_exists('ini_set'))
+	if(version_compare(phpversion(), '5.4', '<'))
 	{
-		ini_set('magic_quotes_runtime', 0);
-		ini_set('magic_quotes_sybase', 0);
-	}
-	if(get_magic_quotes_gpc())
-	{
-		stripSlashesFromArray($_POST);
-		stripSlashesFromArray($_GET);
-		stripSlashesFromArray($_COOKIE);
-		stripSlashesFromArray($_REQUEST);
+		if(function_exists('ini_set'))
+		{
+			ini_set('magic_quotes_runtime', 0);
+			ini_set('magic_quotes_sybase', 0);
+		}
+		if(get_magic_quotes_gpc())
+		{
+			stripSlashesFromArray($_POST);
+			stripSlashesFromArray($_GET);
+			stripSlashesFromArray($_COOKIE);
+			stripSlashesFromArray($_REQUEST);
+		}
 	}
 }
 
@@ -407,7 +411,7 @@ function getProfilePath( $user = null )
         {
         	$ret.=('/users/'.$user);
         	if(!is_dir($ret))
-			makeDirectory( array($ret,$ret.'/settings',$ret.'/torrents') );
+			makeDirectory( array($ret,$ret.'/settings',$ret.'/torrents',$ret.'/tmp') );
 	}
 	return($ret);
 }

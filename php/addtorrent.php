@@ -6,7 +6,7 @@ set_time_limit(0);
 
 if(isset($_REQUEST['result']))
 {
-	if(isset($_REQUEST['json']))	
+	if(isset($_REQUEST['json']))
 		cachedEcho( '{ "result" : "'.$_REQUEST['result'][0].'" }',"application/json");
 	else
 	{
@@ -22,7 +22,7 @@ else
 {
 	$uploaded_files = array();
 	$label = null;
-	if(isset($_REQUEST['label']))	
+	if(isset($_REQUEST['label']))
 		$label = trim($_REQUEST['label']);
 	$dir_edit = null;
 	if(isset($_REQUEST['dir_edit']))
@@ -37,7 +37,7 @@ else
 		{
 			if( is_array($_FILES['torrent_file']['name']) )
 			{
-				for ($i = 0; $i<count($_FILES['torrent_file']['name']); ++$i) 
+				for ($i = 0; $i<count($_FILES['torrent_file']['name']); ++$i)
 				{
 		                        $files[] = array
         		                (
@@ -76,8 +76,8 @@ else
 					$cli = new Snoopy();
 					if(@$cli->fetchComplex($url) && $cli->status>=200 && $cli->status<300)
 					{
-				        	$name = $cli->get_filename();
-					        if($name===false)
+						$name = $cli->get_filename();
+						if($name===false)
 							$name = md5($url).".torrent";
 						$name = getUniqueUploadedFilename($name);
 						$f = @fopen($name,"w");
@@ -91,12 +91,12 @@ else
 					}
 					else
 						$uploaded_url['status'] = "FailedURL";
-				}	
+				}
 				$uploaded_files[] = $uploaded_url;
 			}
 		}
 	}
-	$location = "Location: addtorrent.php?";
+	$location = "Location: //".$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF'])."/addtorrent.php?";
 	if(empty($uploaded_files))
 		$uploaded_files = array( array( 'status' => "Failed" ) );
 	foreach($uploaded_files as &$file)
